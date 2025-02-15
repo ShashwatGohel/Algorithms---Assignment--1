@@ -1,0 +1,48 @@
+#include <iostream>
+#include <limits.h>
+using namespace std;
+
+void findMinAndSecondMin(int arr[], int low, int high, int &minVal, int &secondMinVal) {
+    if (low == high) {
+        minVal = arr[low];
+        secondMinVal = INT_MAX;
+        return;
+    }
+    
+    if (high == low + 1) {
+        if (arr[low] < arr[high]) {
+            minVal = arr[low];
+            secondMinVal = arr[high];
+        } else {
+            minVal = arr[high];
+            secondMinVal = arr[low];
+        }
+        return;
+    }
+    
+    int mid = (low + high) / 2;
+    int leftMin, leftSecondMin, rightMin, rightSecondMin;
+    findMinAndSecondMin(arr, low, mid, leftMin, leftSecondMin);
+    findMinAndSecondMin(arr, mid + 1, high, rightMin, rightSecondMin);
+    
+    if (leftMin < rightMin) {
+        minVal = leftMin;
+        secondMinVal = min(leftSecondMin, rightMin);
+    } else {
+        minVal = rightMin;
+        secondMinVal = min(rightSecondMin, leftMin);
+    }
+}
+
+int main() {
+    int arr[] = {5, 3, 8, 2, 7, 1, 4};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    int minVal, secondMinVal;
+    findMinAndSecondMin(arr, 0, n - 1, minVal, secondMinVal);
+    
+    cout << "Minimum: " << minVal << endl;
+    cout << "Second Minimum: " << secondMinVal << endl;
+    
+    return 0;
+}
