@@ -1,43 +1,26 @@
 #include <iostream>
+#include <utility>  
 using namespace std;
 
-struct MinMax {
-    int min;
-    int max;
-};
+pair<int, int> findMinMax(int arr[], int low, int high) {
+    if (low == high) return {arr[low], arr[low]};  
+    if (high == low + 1) return {min(arr[low], arr[high]), max(arr[low], arr[high])};  
 
-MinMax findMinMax(int arr[], int start, int end) {
-    MinMax result, left, right;
-    
-    if (start == end) {
-        result.min = result.max = arr[start];
-        return result;
-    }
-    
-    if (end == start + 1) {
-        if (arr[start] > arr[end]) {
-            result.max = arr[start];
-            result.min = arr[end];
-        } else {
-            result.max = arr[end];
-            result.min = arr[start];
-        }
-        return result;
-    }
-    
-    int mid = (start + end) / 2;
-    left = findMinMax(arr, start, mid);
-    right = findMinMax(arr, mid + 1, end);
-    result.min = min(left.min, right.min);
-    result.max = max(left.max, right.max);
-    return result;
+    int mid = (low + high) / 2;
+    pair<int, int> left = findMinMax(arr, low, mid);
+    pair<int, int> right = findMinMax(arr, mid + 1, high);
+
+    return {min(left.first, right.first), max(left.second, right.second)};
 }
 
 int main() {
     int arr[] = {12, 5, 78, 34, 2, 45, 90, 8};
     int n = sizeof(arr) / sizeof(arr[0]);
-    MinMax result = findMinMax(arr, 0, n - 1);
-    cout << "Minimum element: " << result.min << endl;
-    cout << "Maximum element: " << result.max << endl;
+
+    pair<int, int> result = findMinMax(arr, 0, n - 1);
+
+    cout << "Minimum element: " << result.first << endl;
+    cout << "Maximum element: " << result.second << endl;
+
     return 0;
 }
